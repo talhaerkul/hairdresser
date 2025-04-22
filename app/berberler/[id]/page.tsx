@@ -97,6 +97,11 @@ export default function BarberDetailPage() {
     if (!berber || !selectedService) return [];
 
     const dateString = format(date, "yyyy-MM-dd");
+    const now = new Date();
+    const isToday = format(date, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
+
+    // Şu andan 1 saat sonrası
+    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
 
     // Seçilen gün için müsait zaman aralıklarını bul
     const dayAvailability = availability.find(
@@ -128,40 +133,50 @@ export default function BarberDetailPage() {
     ) {
       const timeString = format(currentTime, "HH:mm");
 
-      // Bu zaman için bir randevu kontrolü yap
-      const timeEndWithService = addMinutes(currentTime, serviceDuration);
+      // Bu saati oluştur - yıl, ay, gün ve saat bilgisiyle
+      const currentDateTime = parseISO(`${dateString}T${timeString}`);
 
-      // Bu saatte çakışan bir randevu var mı kontrol et
-      const hasOverlap = dayAppointments.some((appointment) => {
-        const appointmentStart = parseISO(`${dateString}T${appointment.time}`);
-        const appointmentEnd = addMinutes(
-          appointmentStart,
-          appointment.duration
-        );
+      // Geçmiş saatler veya şu andan 1 saat içindeki saatler seçilemez
+      const isTooEarly = isToday && isBefore(currentDateTime, oneHourFromNow);
 
-        // Çakışma kontrolü: Randevu başlangıç ve bitiş zamanları arasında çakışma var mı?
-        return (
-          // Yeni randevu başlangıcı mevcut randevu aralığına denk geliyor mu?
-          ((isAfter(currentTime, appointmentStart) ||
-            format(currentTime, "HH:mm") ===
-              format(appointmentStart, "HH:mm")) &&
-            isBefore(currentTime, appointmentEnd)) ||
-          // Yeni randevu bitişi mevcut randevu aralığına denk geliyor mu?
-          (isAfter(timeEndWithService, appointmentStart) &&
-            isBefore(timeEndWithService, appointmentEnd)) ||
-          // Yeni randevu tamamen mevcut randevuyu kapsıyor mu?
-          (isBefore(currentTime, appointmentStart) &&
-            isAfter(timeEndWithService, appointmentEnd))
-        );
-      });
+      if (!isTooEarly) {
+        // Bu zaman için bir randevu kontrolü yap
+        const timeEndWithService = addMinutes(currentTime, serviceDuration);
 
-      // Eğer çakışma yoksa ve mesai bitiş saatinden önce bitiyorsa, müsait zamanlara ekle
-      if (
-        !hasOverlap &&
-        (isBefore(timeEndWithService, endTime) ||
-          format(timeEndWithService, "HH:mm") === format(endTime, "HH:mm"))
-      ) {
-        availableTimes.push(timeString);
+        // Bu saatte çakışan bir randevu var mı kontrol et
+        const hasOverlap = dayAppointments.some((appointment) => {
+          const appointmentStart = parseISO(
+            `${dateString}T${appointment.time}`
+          );
+          const appointmentEnd = addMinutes(
+            appointmentStart,
+            appointment.duration
+          );
+
+          // Çakışma kontrolü: Randevu başlangıç ve bitiş zamanları arasında çakışma var mı?
+          return (
+            // Yeni randevu başlangıcı mevcut randevu aralığına denk geliyor mu?
+            ((isAfter(currentTime, appointmentStart) ||
+              format(currentTime, "HH:mm") ===
+                format(appointmentStart, "HH:mm")) &&
+              isBefore(currentTime, appointmentEnd)) ||
+            // Yeni randevu bitişi mevcut randevu aralığına denk geliyor mu?
+            (isAfter(timeEndWithService, appointmentStart) &&
+              isBefore(timeEndWithService, appointmentEnd)) ||
+            // Yeni randevu tamamen mevcut randevuyu kapsıyor mu?
+            (isBefore(currentTime, appointmentStart) &&
+              isAfter(timeEndWithService, appointmentEnd))
+          );
+        });
+
+        // Eğer çakışma yoksa ve mesai bitiş saatinden önce bitiyorsa, müsait zamanlara ekle
+        if (
+          !hasOverlap &&
+          (isBefore(timeEndWithService, endTime) ||
+            format(timeEndWithService, "HH:mm") === format(endTime, "HH:mm"))
+        ) {
+          availableTimes.push(timeString);
+        }
       }
 
       // 30 dakika ilerlet
@@ -214,6 +229,12 @@ export default function BarberDetailPage() {
     } finally {
       setIsBooking(false);
     }
+  };
+
+  const isDateInPast = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
   };
 
   if (loading) {
@@ -427,6 +448,8 @@ export default function BarberDetailPage() {
                           selected={selectedDate}
                           onSelect={handleDateSelect}
                           locale={tr}
+                          className="border rounded-md p-3 bg-white"
+                          disabled={isDateInPast}
                           modifiers={{
                             available: (date) => {
                               const dateStr = format(date, "yyyy-MM-dd");
@@ -437,21 +460,10 @@ export default function BarberDetailPage() {
                           }}
                           modifiersStyles={{
                             available: {
-                              backgroundColor: "#f0f9ff",
-                              color: "#3b82f6",
+                              backgroundColor: "#ebf4ff",
+                              color: "#1a56db",
                               fontWeight: "bold",
                             },
-                          }}
-                          disabled={(date) => {
-                            const today = new Date();
-                            today.setHours(0, 0, 0, 0);
-                            const dateStr = format(date, "yyyy-MM-dd");
-                            return (
-                              date < today ||
-                              !availability.some(
-                                (a) => a.date === dateStr && a.isAvailable
-                              )
-                            );
                           }}
                         />
                       </div>

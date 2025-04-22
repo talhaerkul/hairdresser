@@ -14,10 +14,6 @@ export interface ContactData {
       label: string;
       value: string;
     };
-    workingHours: {
-      label: string;
-      value: string[];
-    };
   };
   socialMedia: {
     title: string;
@@ -45,23 +41,15 @@ export const contactData: ContactData = {
     title: "İletişim Bilgilerimiz",
     address: {
       label: "Adres",
-      value: "Örnek Mahallesi, Teknoloji Caddesi No: 123\nMerkez / ANKARA",
+      value: "İstanbul",
     },
     phone: {
       label: "Telefon",
-      value: "+90 (312) 123 45 67",
+      value: "+90 (212) 123 45 67",
     },
     email: {
       label: "E-posta",
-      value: "info@hairtime.com",
-    },
-    workingHours: {
-      label: "Çalışma Saatleri",
-      value: [
-        "Pazartesi - Cuma: 09:00 - 18:00",
-        "Cumartesi: 10:00 - 15:00",
-        "Pazar: Kapalı",
-      ],
+      value: "info@berberrandevu.com",
     },
   },
   socialMedia: {

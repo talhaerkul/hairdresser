@@ -86,19 +86,6 @@ export default function ContactPage() {
                       {contactData.contactInfo.email.value}
                     </p>
                   </div>
-
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500">
-                      {contactData.contactInfo.workingHours.label}
-                    </h3>
-                    <div className="mt-1 text-sm text-gray-900">
-                      {contactData.contactInfo.workingHours.value.map(
-                        (hours, index) => (
-                          <p key={index}>{hours}</p>
-                        )
-                      )}
-                    </div>
-                  </div>
                 </div>
 
                 <div className="mt-8">

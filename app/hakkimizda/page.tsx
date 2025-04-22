@@ -33,13 +33,6 @@ export default function AboutPage() {
                   <li key={index}>{item}</li>
                 ))}
               </ul>
-
-              <h2 className="text-xl font-semibold text-gray-800 mt-8 mb-4">
-                {aboutData.team.title}
-              </h2>
-              <p className="text-gray-700 mb-6">{aboutData.team.content}</p>
-
-              <p className="text-gray-700 mt-10 italic">{aboutData.closing}</p>
             </div>
           </div>
         </div>

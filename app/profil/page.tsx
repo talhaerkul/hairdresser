@@ -20,6 +20,7 @@ export default function ProfilePage() {
     phone: "",
     location: "",
     specialization: "",
+    experience: "",
   });
   const [isUpdating, setIsUpdating] = useState(false);
   const [activeTab, setActiveTab] = useState<"profile" | "services">("profile");
@@ -48,6 +49,10 @@ export default function ProfilePage() {
               location: data.role === "barber" ? data.location || "" : "",
               specialization:
                 data.role === "barber" ? data.specialization || "" : "",
+              experience:
+                data.role === "barber"
+                  ? String((data as any).experience || "")
+                  : "",
             });
           } else {
             console.log(
@@ -111,6 +116,10 @@ export default function ProfilePage() {
         location: userData.role === "barber" ? userData.location || "" : "",
         specialization:
           userData.role === "barber" ? userData.specialization || "" : "",
+        experience:
+          userData.role === "barber"
+            ? String((userData as any).experience || "")
+            : "",
       });
     }
   }, [isEditing, userData]);
@@ -151,6 +160,11 @@ export default function ProfilePage() {
       if (userData && userData.role === "barber") {
         updateData.location = formValues.location;
         updateData.specialization = formValues.specialization;
+
+        // Add experience if provided (convert to number)
+        if (formValues.experience) {
+          updateData.experience = parseInt(formValues.experience, 10) || 0;
+        }
       }
 
       const updatedUser = await updateProfile(user.uid, updateData);
@@ -360,6 +374,24 @@ export default function ProfilePage() {
                                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 />
                               </div>
+                              <div>
+                                <label
+                                  htmlFor="experience"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Deneyim (Yıl)
+                                </label>
+                                <input
+                                  type="number"
+                                  id="experience"
+                                  name="experience"
+                                  value={formValues.experience}
+                                  onChange={handleFormChange}
+                                  placeholder="Örn: 5"
+                                  min="0"
+                                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                />
+                              </div>
                             </>
                           )}
                         </div>
@@ -449,6 +481,16 @@ export default function ProfilePage() {
                               </dt>
                               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                 {userData.specialization || "-"}
+                              </dd>
+                            </div>
+                            <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                              <dt className="text-sm font-medium text-gray-500">
+                                Deneyim
+                              </dt>
+                              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                {(userData as any).experience
+                                  ? `${(userData as any).experience} Yıl`
+                                  : "-"}
                               </dd>
                             </div>
                           </>

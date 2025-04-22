@@ -13,17 +13,12 @@ export interface AboutData {
     title: string;
     items: string[];
   };
-  team: {
-    title: string;
-    content: string;
-  };
-  closing: string;
 }
 
 export const aboutData: AboutData = {
   title: "Hakkımızda",
   intro:
-    "HairTime, 2023 yılında kurulan modern bir berber ve kuaför randevu platformudur. Amacımız, müşterilerin en uygun zamanda, en uygun berberi kolayca bulmasını sağlamaktır.",
+    "Berber Randevu, 2025 yılında kurulan modern bir berber ve kuaför randevu platformudur. Amacımız, müşterilerin en uygun zamanda, en uygun berberi kolayca bulmasını sağlamaktır.",
   mission: {
     title: "Misyonumuz",
     content:
@@ -44,11 +39,4 @@ export const aboutData: AboutData = {
       "Kullanıcı gizliliği ve veri güvenliği konusunda en yüksek standartlarda çalışırız.",
     ],
   },
-  team: {
-    title: "Ekibimiz",
-    content:
-      "Genç ve dinamik ekibimiz, teknoloji ve berberlik sektörünün profesyonellerinden oluşmaktadır. Her biri alanında uzman olan ekip üyelerimiz, en iyi kullanıcı deneyimini sunmak için çalışmaktadır.",
-  },
-  closing:
-    "HairTime ekibi olarak, sizlere hizmet vermekten mutluluk duyuyoruz.",
 };
