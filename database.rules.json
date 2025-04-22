@@ -1,0 +1,38 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "users": {
+      ".read": true,
+      ".indexOn": ["role"],
+      "$uid": {
+        ".write": "auth != null && auth.uid == $uid",
+        "availability": {
+          ".indexOn": ["date"]
+        }
+      }
+    },
+    "appointments": {
+      ".read": true,
+      ".indexOn": ["barberId", "customerId", "date", "status"],
+      "$appointmentId": {
+        ".write": "auth != null && (data.child('barberId').val() == auth.uid || data.child('customerId').val() == auth.uid || newData.child('barberId').val() == auth.uid || newData.child('customerId').val() == auth.uid)"
+      }
+    },
+    "favorites": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["customerId", "barberId"]
+    },
+    "reviews": {
+      ".read": true,
+      ".write": "auth != null",
+      ".indexOn": ["barberId", "customerId", "appointmentId"]
+    },
+    "services": {
+      ".read": true,
+      ".write": "auth != null",
+      ".indexOn": ["barberId"]
+    }
+  }
+}
