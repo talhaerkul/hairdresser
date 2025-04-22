@@ -204,7 +204,7 @@ export default function ProfilePage() {
     <ProtectedRoute>
       <div className="min-h-screen py-12 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center">
             Profilim
           </h1>
 
@@ -213,7 +213,7 @@ export default function ProfilePage() {
               <div className="border-b border-gray-200">
                 <nav className="flex -mb-px">
                   <button
-                    className={`w-1/2 py-4 px-1 text-center border-b-2 font-medium text-lg ${
+                    className={`w-1/2 py-3 sm:py-4 px-1 text-center border-b-2 font-medium text-sm sm:text-lg ${
                       activeTab === "profile"
                         ? "border-blue-500 text-blue-600"
                         : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -223,7 +223,7 @@ export default function ProfilePage() {
                     Profilim
                   </button>
                   <button
-                    className={`w-1/2 py-4 px-1 text-center border-b-2 font-medium text-lg ${
+                    className={`w-1/2 py-3 sm:py-4 px-1 text-center border-b-2 font-medium text-sm sm:text-lg ${
                       activeTab === "services"
                         ? "border-blue-500 text-blue-600"
                         : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -245,7 +245,7 @@ export default function ProfilePage() {
             <>
               {(activeTab === "profile" || userData.role !== "barber") && (
                 <div className="bg-white shadow overflow-hidden rounded-lg">
-                  <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
+                  <div className="px-4 py-5 sm:px-6 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                     <div>
                       <h3 className="text-lg leading-6 font-medium text-gray-900">
                         Kullanıcı Bilgileri
@@ -257,7 +257,7 @@ export default function ProfilePage() {
                     {!isEditing && (
                       <button
                         onClick={() => setIsEditing(true)}
-                        className="px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto"
                       >
                         Düzenle
                       </button>
@@ -265,7 +265,10 @@ export default function ProfilePage() {
                   </div>
                   <div className="border-t border-gray-200">
                     {isEditing ? (
-                      <form onSubmit={handleUpdateProfile} className="p-4">
+                      <form
+                        onSubmit={handleUpdateProfile}
+                        className="p-4 sm:p-6"
+                      >
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                           <div>
                             <label
@@ -395,18 +398,18 @@ export default function ProfilePage() {
                             </>
                           )}
                         </div>
-                        <div className="mt-6 flex items-center space-x-4">
+                        <div className="mt-6 flex flex-col sm:flex-row items-center gap-3 sm:space-x-4">
                           <button
                             type="submit"
                             disabled={isUpdating}
-                            className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300"
+                            className="w-full sm:w-auto px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300"
                           >
                             {isUpdating ? "Güncelleniyor..." : "Güncelle"}
                           </button>
                           <button
                             type="button"
                             onClick={() => setIsEditing(false)}
-                            className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            className="w-full sm:w-auto px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
                           >
                             İptal
                           </button>
@@ -414,7 +417,7 @@ export default function ProfilePage() {
                       </form>
                     ) : (
                       <dl className="divide-y divide-gray-200">
-                        <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div className="py-4 sm:py-5 px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
                           <dt className="text-sm font-medium text-gray-500">
                             Ad Soyad
                           </dt>
@@ -422,15 +425,15 @@ export default function ProfilePage() {
                             {userData.name}
                           </dd>
                         </div>
-                        <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div className="py-4 sm:py-5 px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
                           <dt className="text-sm font-medium text-gray-500">
                             E-posta
                           </dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 break-words">
                             {userData.email}
                           </dd>
                         </div>
-                        <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div className="py-4 sm:py-5 px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
                           <dt className="text-sm font-medium text-gray-500">
                             Telefon
                           </dt>
@@ -440,7 +443,7 @@ export default function ProfilePage() {
                               : "-"}
                           </dd>
                         </div>
-                        <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div className="py-4 sm:py-5 px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
                           <dt className="text-sm font-medium text-gray-500">
                             Kullanıcı Tipi
                           </dt>
@@ -453,7 +456,7 @@ export default function ProfilePage() {
                           </dd>
                         </div>
                         {/* Kayıt Tarihi */}
-                        <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div className="py-4 sm:py-5 px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
                           <dt className="text-sm font-medium text-gray-500">
                             Kayıt Tarihi
                           </dt>
@@ -467,7 +470,7 @@ export default function ProfilePage() {
                         </div>
                         {userData.role === "barber" && (
                           <>
-                            <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div className="py-4 sm:py-5 px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
                               <dt className="text-sm font-medium text-gray-500">
                                 Konum
                               </dt>
@@ -475,7 +478,7 @@ export default function ProfilePage() {
                                 {userData.location || "-"}
                               </dd>
                             </div>
-                            <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div className="py-4 sm:py-5 px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
                               <dt className="text-sm font-medium text-gray-500">
                                 Uzmanlık Alanı
                               </dt>
@@ -483,7 +486,7 @@ export default function ProfilePage() {
                                 {userData.specialization || "-"}
                               </dd>
                             </div>
-                            <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div className="py-4 sm:py-5 px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
                               <dt className="text-sm font-medium text-gray-500">
                                 Deneyim
                               </dt>

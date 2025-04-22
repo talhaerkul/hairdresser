@@ -203,20 +203,6 @@ export default function Navbar() {
             >
               Berberler
             </Link>
-            <Link
-              href="/hakkimizda"
-              className={getLinkClassName("/hakkimizda")}
-              onClick={closeMenu}
-            >
-              Hakkımızda
-            </Link>
-            <Link
-              href="/iletisim"
-              className={getLinkClassName("/iletisim")}
-              onClick={closeMenu}
-            >
-              İletişim
-            </Link>
 
             {!loading && (
               <>

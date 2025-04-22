@@ -156,24 +156,26 @@ export default function BarberCalendarPage() {
     <ProtectedRoute allowedRoles={["barber"]}>
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Takvimim</h1>
-            <div className="flex space-x-2">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              Takvimim
+            </h1>
+            <div className="flex flex-wrap justify-center gap-2">
               <button
                 onClick={() => setCurrentWeek(subWeeks(currentWeek, 1))}
-                className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
+                className="px-3 py-2 text-sm sm:px-4 sm:py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Önceki Hafta
               </button>
               <button
                 onClick={() => setCurrentWeek(new Date())}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-3 py-2 text-sm sm:px-4 sm:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
                 Bu Hafta
               </button>
               <button
                 onClick={() => setCurrentWeek(addWeeks(currentWeek, 1))}
-                className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
+                className="px-3 py-2 text-sm sm:px-4 sm:py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Sonraki Hafta
               </button>
@@ -187,11 +189,11 @@ export default function BarberCalendarPage() {
           ) : (
             <>
               {/* Çalışma Saatleri Ayarları */}
-              <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-8 overflow-x-auto">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   Çalışma Saatleri
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4 min-w-max sm:min-w-0">
                   {weekDays.map((day, index) => {
                     const dateString = format(day, "yyyy-MM-dd");
                     const daySettings = workingHours[dateString];
@@ -199,7 +201,7 @@ export default function BarberCalendarPage() {
                     return (
                       <div
                         key={dateString}
-                        className={`p-4 border rounded-lg ${
+                        className={`p-3 sm:p-4 border rounded-lg ${
                           daySettings?.isAvailable
                             ? "border-blue-500 bg-blue-50"
                             : "border-gray-200"
@@ -271,152 +273,196 @@ export default function BarberCalendarPage() {
                   })}
                 </div>
 
-                <div className="mt-6 flex justify-end">
+                {/* Kaydet Butonu */}
+                <div className="flex justify-end mb-8 mt-2">
                   <button
                     onClick={handleUpdateAvailability}
                     disabled={isUpdatingHours}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300 flex items-center"
                   >
-                    {isUpdatingHours
-                      ? "Güncelleniyor..."
-                      : "Çalışma Saatlerini Güncelle"}
+                    {isUpdatingHours ? (
+                      <>
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Kaydediyor...
+                      </>
+                    ) : (
+                      "Çalışma Saatlerini Kaydet"
+                    )}
                   </button>
                 </div>
-              </div>
 
-              {/* Günlük Randevular */}
-              <div className="space-y-8">
-                {weekDays.map((day) => {
-                  const dateString = format(day, "yyyy-MM-dd");
-                  const dayAppointments = getDayAppointments(dateString);
+                {/* Randevular */}
+                <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                    Randevular
+                  </h2>
 
-                  return (
-                    <div
-                      key={dateString}
-                      className="bg-white rounded-lg shadow-sm overflow-hidden"
-                    >
-                      <div className="bg-gray-50 px-6 py-4 border-b">
-                        <h3 className="text-lg font-medium text-gray-900">
-                          {format(day, "EEEE, d MMMM yyyy", { locale: tr })}
-                        </h3>
-                      </div>
+                  <div className="space-y-8">
+                    {weekDays.map((day) => {
+                      const dateString = format(day, "yyyy-MM-dd");
+                      const dayAppointments = getDayAppointments(dateString);
 
-                      {dayAppointments.length > 0 ? (
-                        <div className="divide-y divide-gray-200">
-                          {dayAppointments.map((appointment) => (
-                            <div key={appointment.id} className="p-6">
-                              <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                                <div>
-                                  <h4 className="text-lg font-semibold text-gray-900">
-                                    {appointment.serviceName}
-                                  </h4>
-                                  <p className="text-gray-600">
-                                    Müşteri: {appointment.customerName}
-                                  </p>
-                                  <div className="flex items-center mt-2">
-                                    <svg
-                                      className="h-5 w-5 text-gray-500 mr-2"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
+                      return (
+                        <div key={dateString} className="border-t pt-6">
+                          <h3 className="font-medium text-lg text-gray-900 mb-4">
+                            {format(day, "d MMMM EEEE", { locale: tr })}
+                          </h3>
+
+                          {dayAppointments.length > 0 ? (
+                            <div className="overflow-x-auto">
+                              <table className="min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-50">
+                                  <tr>
+                                    <th
+                                      scope="col"
+                                      className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                     >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                      />
-                                    </svg>
-                                    <span className="text-gray-800">
-                                      {appointment.time} ({appointment.duration}{" "}
-                                      dk)
-                                    </span>
-                                  </div>
-                                  <div className="mt-2">
-                                    <span
-                                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                        appointment.status === "cancelled"
-                                          ? "bg-red-100 text-red-800"
-                                          : appointment.status === "completed"
-                                          ? "bg-green-100 text-green-800"
-                                          : appointment.status === "confirmed"
-                                          ? "bg-blue-100 text-blue-800"
-                                          : "bg-yellow-100 text-yellow-800"
-                                      }`}
+                                      Saat
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                     >
-                                      {appointment.status === "cancelled"
-                                        ? "İptal Edildi"
-                                        : appointment.status === "completed"
-                                        ? "Tamamlandı"
-                                        : appointment.status === "confirmed"
-                                        ? "Onaylandı"
-                                        : "Onay Bekleniyor"}
-                                    </span>
-                                  </div>
-                                </div>
+                                      Müşteri
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                      Hizmet
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                      Durum
+                                    </th>
+                                    <th
+                                      scope="col"
+                                      className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                      İşlemler
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                  {dayAppointments.map((appointment) => (
+                                    <tr key={appointment.id}>
+                                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {appointment.time} (
+                                        {appointment.duration} dk)
+                                      </td>
+                                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {appointment.customerName}
+                                      </td>
+                                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {appointment.serviceName}
+                                      </td>
+                                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <span
+                                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                            appointment.status === "cancelled"
+                                              ? "bg-red-100 text-red-800"
+                                              : appointment.status ===
+                                                "completed"
+                                              ? "bg-green-100 text-green-800"
+                                              : appointment.status ===
+                                                "confirmed"
+                                              ? "bg-blue-100 text-blue-800"
+                                              : "bg-yellow-100 text-yellow-800"
+                                          }`}
+                                        >
+                                          {appointment.status === "cancelled"
+                                            ? "İptal Edildi"
+                                            : appointment.status === "completed"
+                                            ? "Tamamlandı"
+                                            : appointment.status === "confirmed"
+                                            ? "Onaylandı"
+                                            : "Onay Bekleniyor"}
+                                        </span>
+                                      </td>
+                                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <div className="flex flex-col space-y-2">
+                                          {appointment.status === "pending" && (
+                                            <button
+                                              onClick={() =>
+                                                handleUpdateAppointmentStatus(
+                                                  appointment.id,
+                                                  "confirmed"
+                                                )
+                                              }
+                                              className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                                            >
+                                              Onayla
+                                            </button>
+                                          )}
 
-                                <div className="mt-4 md:mt-0">
-                                  <div className="text-lg font-bold text-gray-900 mb-2 text-right">
-                                    {appointment.servicePrice} ₺
-                                  </div>
+                                          {(appointment.status === "pending" ||
+                                            appointment.status ===
+                                              "confirmed") && (
+                                            <button
+                                              onClick={() =>
+                                                handleUpdateAppointmentStatus(
+                                                  appointment.id,
+                                                  "cancelled"
+                                                )
+                                              }
+                                              className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
+                                            >
+                                              İptal Et
+                                            </button>
+                                          )}
 
-                                  <div className="flex flex-col space-y-2">
-                                    {appointment.status === "pending" && (
-                                      <button
-                                        onClick={() =>
-                                          handleUpdateAppointmentStatus(
-                                            appointment.id,
-                                            "confirmed"
-                                          )
-                                        }
-                                        className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                                      >
-                                        Onayla
-                                      </button>
-                                    )}
-
-                                    {(appointment.status === "pending" ||
-                                      appointment.status === "confirmed") && (
-                                      <button
-                                        onClick={() =>
-                                          handleUpdateAppointmentStatus(
-                                            appointment.id,
-                                            "cancelled"
-                                          )
-                                        }
-                                        className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
-                                      >
-                                        İptal Et
-                                      </button>
-                                    )}
-
-                                    {appointment.status === "confirmed" && (
-                                      <button
-                                        onClick={() =>
-                                          handleUpdateAppointmentStatus(
-                                            appointment.id,
-                                            "completed"
-                                          )
-                                        }
-                                        className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
-                                      >
-                                        Tamamlandı
-                                      </button>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
+                                          {appointment.status ===
+                                            "confirmed" && (
+                                            <button
+                                              onClick={() =>
+                                                handleUpdateAppointmentStatus(
+                                                  appointment.id,
+                                                  "completed"
+                                                )
+                                              }
+                                              className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                                            >
+                                              Tamamlandı
+                                            </button>
+                                          )}
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
                             </div>
-                          ))}
+                          ) : (
+                            <div className="p-6 text-center text-gray-500">
+                              Bu gün için randevu bulunmuyor.
+                            </div>
+                          )}
                         </div>
-                      ) : (
-                        <div className="p-6 text-center text-gray-500">
-                          Bu gün için randevu bulunmuyor.
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </>
           )}
