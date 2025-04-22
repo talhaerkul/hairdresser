@@ -1,1 +1,1 @@
-[# hairdresser](https://hairdresser-beta.vercel.app/)
+https://hairdresser-beta.vercel.app/
