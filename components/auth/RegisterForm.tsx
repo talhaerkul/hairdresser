@@ -200,7 +200,7 @@ export default function RegisterForm() {
         <button
           type="submit"
           disabled={
-            isLoading || (role === "barber" && !profileImage && !previewUrl)
+            isLoading
           }
           className="w-full py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300"
         >
